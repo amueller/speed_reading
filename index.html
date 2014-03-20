@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Speed it up! Simple speed-reading</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script>
+        speed = 200;
+        paused = true;
+        position = 0;
+
+
+        function pause(){
+            paused = true;
+        }
+
+        function stop(){
+            paused = true;
+            position = 0;
+        }
+
+        function faster(){
+            speed = speed + 50;
+            $("#speedOMeter").text(speed + " WPM");
+        }
+
+        function slower(){
+            if (speed > 50){
+                speed = speed - 50;
+            }
+            $("#speedOMeter").text(speed + " WPM");
+        }
+
+        function timedDisplay(textList){
+            if (paused) {
+                return
+            }
+            position = position + 1;
+
+            var length = textList[0].length;
+            var word = textList[0];
+            var splitPoint = 1 + Math.ceil((length - 1)/4);
+            $("#left").text(word.slice(0, splitPoint - 1));
+            $("#focus").text(word[splitPoint - 1]);
+            if (length > splitPoint){
+                $("#right").text(word.slice(splitPoint));
+            }
+            else{
+                $("#right").text("");
+            }
+            $("#left").width(100 - $("#focus").outerWidth(true) / 2.);
+            $("#right").width(400 - $("#focus").outerWidth(true) / 2.);
+            $("#speedOMeter").text(speed + " WPM");
+            if (textList.length > 1){
+                var newTextList = textList.slice(1);
+                setTimeout(function(){
+                    timedDisplay(newTextList);
+                }, 1000 * 60 / speed);
+            }
+            else {
+                <!--text ended-->
+                position = 0;
+            }
+
+        }
+
+        function play(){
+            paused = false;
+            var allText = $("#input-form").val();
+            var splitText = allText.split(/\s/);
+                setTimeout(function(){
+                    timedDisplay(splitText.slice(position));
+                }, 1000 * 60 / speed);
+            
+        }
+    </script>
+  </head>
+  <body style="font-size:24px;">
+    <div class="container">
+        <div class="jumbotron">
+          <h1>Speed it up!</h1>
+
+          <div class="panel panel-default">
+              <div class="panel-body" id="reading-panel">
+                  <table cellspacing=0 cellpadding=0 class="display-panel">
+                      <tr style="background-image: url('black_bar_down.png'); background-position: bottom; background-repeat: repeat-x;"><td>&nbsp;</td><td style="background-image: url('black_thing_down.png'); background-position: center bottom; background-repeat: no-repeat;"></td><td>&nbsp;</div>
+                      <tr><td style="text-align:right; width:94px" id="left">w</td><td id="focus" style="color:red;">o</td><td id="right" style="width:394px">rd</td></tr>
+                      <tr style="background-image: url('black_bar_up.png'); background-position: top; background-repeat: repeat-x;"><td>&nbsp;</td><td style="background-image: url('black_thing_up.png'); background-position: center top; background-repeat: no-repeat;"></td><td>&nbsp;</div>
+                      </table>
+                  </div>
+
+          </div>
+
+          <form role="form">
+              <div class="form-group">
+                  <textarea class="form-control" id="input-form">Place your text here and press play.</textarea>
+              </div>
+          </form>
+          <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default glyphicon glyphicon-play" onclick="play();"></button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-pause" onclick="pause();"></button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-stop" onclick="stop();"></button>
+            </div>
+            <div class="btn-group" style="width:180px; text-align:right">
+                <span class="" id="speedOMeter">200 WPM</span>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default glyphicon glyphicon-chevron-down" onclick="slower();"></button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-chevron-up" onclick="faster();"></button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
+
