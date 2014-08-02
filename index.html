@@ -84,12 +84,20 @@
                 }, 1000 * 60 / speed);
             
         }
+	function toggle_visibility(id) {
+		var e = document.getElementById(id);
+		if(e.style.display == 'block')
+			e.style.display = 'none';
+		else
+			e.style.display = 'block';
+	}
+
     </script>
   </head>
   <body style="font-size:24px;">
     <div class="container">
         <div class="jumbotron">
-          <h1>Speed it up!</h1>
+          <h1 id="head-title">Speed it up!</h1>
 
           <div class="panel panel-default">
               <div class="panel-body" id="reading-panel">
@@ -103,12 +111,13 @@
           </div>
 
           <form role="form">
-              <div class="form-group">
+              <div id="text-input" class="form-group">
                   <textarea class="form-control" id="input-form">Place your text here and press play.</textarea>
               </div>
           </form>
           <div class="btn-toolbar" role="toolbar">
             <div class="btn-group">
+                <button type="button" class="btn btn-default glyphicon glyphicon-hide" onclick="toggle_visibility('text-input'); toggle_visibility('head-title');">hide/show</button>
                 <button type="button" class="btn btn-default glyphicon glyphicon-play" onclick="play();"></button>
                 <button type="button" class="btn btn-default glyphicon glyphicon-pause" onclick="pause();"></button>
                 <button type="button" class="btn btn-default glyphicon glyphicon-stop" onclick="stop();"></button>
